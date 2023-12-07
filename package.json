@@ -71,7 +71,7 @@
     "d3-time-format": "^4.1.0",
     "dayjs": "^1.11.5",
     "ethers": "^5.5.4",
-    "fuse.js": "^6.6.2",
+    "fuse.js": "^7.0.0",
     "gray-matter": "^4.0.3",
     "immer": "^9.0.15",
     "lowdb": "^3.0.0",
