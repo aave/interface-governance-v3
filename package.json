@@ -41,7 +41,7 @@
     "@emotion/styled": "11.10.4",
     "@gnosis.pm/safe-apps-web3-react": "^1.2.0",
     "@heroicons/react": "^1.0.6",
-    "@lingui/react": "^3.14.0",
+    "@lingui/react": "^3.17.2",
     "@mui/icons-material": "^5.10.14",
     "@mui/material": "^5.10.9",
     "@paraswap/sdk": "6.2.4",
