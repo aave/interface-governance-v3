@@ -9,7 +9,8 @@ on:
 jobs:
   upload-to-crowdin:
     name: Upload sources to Crowdin
-    runs-on: ubuntu-latest
+    runs-on:
+        group: larger
 
     steps:
       - name: Checkout

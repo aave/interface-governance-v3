@@ -10,7 +10,8 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on:
+        group: larger
     if: |
       (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
       (github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name &&
@@ -37,7 +38,8 @@ jobs:
           BUILD_ARTIFACT_NAME: 'out'
 
   build_staging:
-    runs-on: ubuntu-latest
+    runs-on:
+        group: larger
     if: |
       github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
@@ -58,7 +60,8 @@ jobs:
           PR_INFO: 'false'
 
   cypress_smoke_v2:
-    runs-on: ubuntu-latest
+    runs-on:
+        group: larger
     if: "!contains(github.event.head_commit.message, '[skip cypress]')"
     needs: build
     strategy:
@@ -79,7 +82,8 @@ jobs:
           YARN_TEST_COMMAND: npx cypress-repeat run -n 2 --rerun-failed-only --config-file ./cypress/configs/v2-markets/${{ matrix.market }}-v2-smoke.config.ts
 
   cypress_smoke_v3:
-    runs-on: ubuntu-latest
+    runs-on:
+        group: larger
     if: "!contains(github.event.head_commit.message, '[skip cypress]')"
     needs: build
     strategy:
@@ -105,7 +109,8 @@ jobs:
           YARN_TEST_COMMAND: npx cypress-repeat run -n 2 --rerun-failed-only --config-file ./cypress/configs/v3-markets/${{ matrix.market }}-v3-smoke.config.ts
 
   next_js_analyze:
-    runs-on: ubuntu-latest
+    runs-on:
+        group: larger
     needs: build
     steps:
       - uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # v3.0.2
@@ -125,7 +130,8 @@ jobs:
           PULL_REQUEST_NUMBER: ${{ github.event.number }}
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on:
+        group: larger
     needs:
       - build
     outputs:
@@ -150,7 +156,8 @@ jobs:
           CID_VERSION: 1
 
   cypress_full_v2:
-    runs-on: ubuntu-latest
+    runs-on:
+        group: larger
     if: "!contains(github.event.head_commit.message, '[skip cypress]')"
     needs:
       - deploy
@@ -174,7 +181,8 @@ jobs:
           YARN_TEST_COMMAND: npx cypress-repeat run -n 2 --rerun-failed-only --config-file ./cypress/configs/v2-markets/${{ matrix.market }}-v2-full.config.ts
 
   cypress_full_v3:
-    runs-on: ubuntu-latest
+    runs-on:
+        group: larger
     if: "!contains(github.event.head_commit.message, '[skip cypress]')"
     needs:
       - deploy
@@ -200,7 +208,8 @@ jobs:
           YARN_TEST_COMMAND: npx cypress-repeat run -n 2 --rerun-failed-only --config-file ./cypress/configs/v3-markets/${{ matrix.market }}-v3-full.config.ts
 
   cypress_app_functionality:
-    runs-on: ubuntu-latest
+    runs-on:
+        group: larger
     if: "!contains(github.event.head_commit.message, '[skip cypress]')"
     needs:
       - deploy
