@@ -4,18 +4,17 @@ import {
   ProtocolAction,
   tEthereumAddress,
 } from '@aave/contract-helpers';
-import { BigNumber, ethers } from 'ethers';
 import { SignatureLike } from '@ethersproject/bytes';
 import { TransactionResponse } from '@ethersproject/providers';
-import { utils } from 'ethers';
+import { BigNumber, ethers, utils } from 'ethers';
 import { useEffect, useState } from 'react';
 import { DelegationTokenType } from 'src/components/transactions/GovDelegation/DelegationTokenSelector';
 import { useModalContext } from 'src/hooks/useModal';
 import { useWeb3Context } from 'src/libs/hooks/useWeb3Context';
+import META_DELEGATE_HELPER_ABI from 'src/meta-batch-helper.json';
 import { useRootStore } from 'src/store/root';
 import { getErrorTextFromError, TxAction } from 'src/ui-config/errorMapping';
 import { governanceConfig } from 'src/ui-config/governanceConfig';
-import META_DELEGATE_HELPER_ABI from 'src/meta-batch-helper.json';
 
 import { DelegationType } from './types';
 import { MOCK_SIGNED_HASH } from './useTransactionHandler';
@@ -161,7 +160,7 @@ export const useGovernanceDelegate = (
           delegateParams
         );
 
-        txData.gasLimit = BigNumber.from(10000000)
+        txData.gasLimit = BigNumber.from(10000000);
 
         console.log('txData --->', txData);
 
@@ -376,34 +375,34 @@ export const useGovernanceDelegate = (
       },
       types: isAllDelegate
         ? {
-          EIP712Domain: [
-            {
-              name: 'name',
-              type: 'string',
-            },
-            {
-              name: 'version',
-              type: 'string',
-            },
-            {
-              name: 'chainId',
-              type: 'uint256',
-            },
-            {
-              name: 'verifyingContract',
-              type: 'address',
-            },
-          ],
-          Delegate: [...sigParametersType, ...sigBaseType],
-        }
+            EIP712Domain: [
+              {
+                name: 'name',
+                type: 'string',
+              },
+              {
+                name: 'version',
+                type: 'string',
+              },
+              {
+                name: 'chainId',
+                type: 'uint256',
+              },
+              {
+                name: 'verifyingContract',
+                type: 'address',
+              },
+            ],
+            Delegate: [...sigParametersType, ...sigBaseType],
+          }
         : {
-          DelegateByType: [...sigParametersType, ...sigDelegationTypeType, ...sigBaseType],
-        },
+            DelegateByType: [...sigParametersType, ...sigDelegationTypeType, ...sigBaseType],
+          },
       primaryType: isAllDelegate ? 'Delegate' : 'DelegateByType',
       message: isAllDelegate ? { ...typesData } : { ...typesData, delegationType },
     };
 
-    console.log(typeData)
+    console.log(typeData);
 
     return JSON.stringify(typeData);
   };
@@ -552,8 +551,8 @@ export const useGovernanceDelegate = (
               delegationTokenType === DelegationTokenType.AAVE
                 ? governanceConfig.aaveTokenAddress
                 : delegationTokenType === DelegationTokenType.STKAAVE
-                  ? governanceConfig.stkAaveTokenAddress
-                  : governanceConfig.aAaveTokenAddress,
+                ? governanceConfig.stkAaveTokenAddress
+                : governanceConfig.aAaveTokenAddress,
             // delegationTokenType === DelegationTokenType.AAVE
             //   ? governanceConfig.aaveTokenAddress
             //   : governanceConfig.stkAaveTokenAddress,
@@ -566,8 +565,8 @@ export const useGovernanceDelegate = (
               delegationTokenType === DelegationTokenType.AAVE
                 ? governanceConfig.aaveTokenAddress
                 : delegationTokenType === DelegationTokenType.STKAAVE
-                  ? governanceConfig.stkAaveTokenAddress
-                  : governanceConfig.aAaveTokenAddress,
+                ? governanceConfig.stkAaveTokenAddress
+                : governanceConfig.aAaveTokenAddress,
             // delegationTokenType === DelegationTokenType.AAVE
             //   ? governanceConfig.aaveTokenAddress
             //   : governanceConfig.stkAaveTokenAddress,
