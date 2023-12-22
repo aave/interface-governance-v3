@@ -4,7 +4,7 @@ import {
   ProtocolAction,
   tEthereumAddress,
 } from '@aave/contract-helpers';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { SignatureLike } from '@ethersproject/bytes';
 import { TransactionResponse } from '@ethersproject/providers';
 import { utils } from 'ethers';
@@ -160,6 +160,8 @@ export const useGovernanceDelegate = (
         const txData = await metaDelegateHelperContract.populateTransaction.batchMetaDelegate(
           delegateParams
         );
+
+        txData.gasLimit = BigNumber.from(10000000)
 
         console.log('txData --->', txData);
 
@@ -374,32 +376,34 @@ export const useGovernanceDelegate = (
       },
       types: isAllDelegate
         ? {
-            EIP712Domain: [
-              {
-                name: 'name',
-                type: 'string',
-              },
-              {
-                name: 'version',
-                type: 'string',
-              },
-              {
-                name: 'chainId',
-                type: 'uint256',
-              },
-              {
-                name: 'verifyingContract',
-                type: 'address',
-              },
-            ],
-            Delegate: [...sigParametersType, ...sigBaseType],
-          }
+          EIP712Domain: [
+            {
+              name: 'name',
+              type: 'string',
+            },
+            {
+              name: 'version',
+              type: 'string',
+            },
+            {
+              name: 'chainId',
+              type: 'uint256',
+            },
+            {
+              name: 'verifyingContract',
+              type: 'address',
+            },
+          ],
+          Delegate: [...sigParametersType, ...sigBaseType],
+        }
         : {
-            DelegateByType: [...sigParametersType, ...sigDelegationTypeType, ...sigBaseType],
-          },
+          DelegateByType: [...sigParametersType, ...sigDelegationTypeType, ...sigBaseType],
+        },
       primaryType: isAllDelegate ? 'Delegate' : 'DelegateByType',
       message: isAllDelegate ? { ...typesData } : { ...typesData, delegationType },
     };
+
+    console.log(typeData)
 
     return JSON.stringify(typeData);
   };
@@ -465,7 +469,7 @@ export const useGovernanceDelegate = (
           deadline,
           nonce: String(stkAaveNonce),
           delegationType: GovernancePowerTypeApp.All,
-          governanceTokenName: 'Staked Token',
+          governanceTokenName: 'Staked Aave',
           increaseNonce: false,
         },
         {
@@ -498,7 +502,6 @@ export const useGovernanceDelegate = (
       }
       try {
         const signedPayload: SignatureLike[] = [];
-
         for (const unsignedPayload of unsignedPayloads) {
           signedPayload.push(await signTxData(unsignedPayload));
         }
@@ -549,8 +552,8 @@ export const useGovernanceDelegate = (
               delegationTokenType === DelegationTokenType.AAVE
                 ? governanceConfig.aaveTokenAddress
                 : delegationTokenType === DelegationTokenType.STKAAVE
-                ? governanceConfig.stkAaveTokenAddress
-                : governanceConfig.aAaveTokenAddress,
+                  ? governanceConfig.stkAaveTokenAddress
+                  : governanceConfig.aAaveTokenAddress,
             // delegationTokenType === DelegationTokenType.AAVE
             //   ? governanceConfig.aaveTokenAddress
             //   : governanceConfig.stkAaveTokenAddress,
@@ -563,8 +566,8 @@ export const useGovernanceDelegate = (
               delegationTokenType === DelegationTokenType.AAVE
                 ? governanceConfig.aaveTokenAddress
                 : delegationTokenType === DelegationTokenType.STKAAVE
-                ? governanceConfig.stkAaveTokenAddress
-                : governanceConfig.aAaveTokenAddress,
+                  ? governanceConfig.stkAaveTokenAddress
+                  : governanceConfig.aAaveTokenAddress,
             // delegationTokenType === DelegationTokenType.AAVE
             //   ? governanceConfig.aaveTokenAddress
             //   : governanceConfig.stkAaveTokenAddress,
